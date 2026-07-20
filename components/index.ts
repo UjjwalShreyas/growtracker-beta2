@@ -33,3 +33,4 @@ export { UiverseAllRecipesButton } from "./ui/UiverseAllRecipesButton";
 export { UiverseScanButton } from "./ui/UiverseScanButton";
 export { ProceedButton } from "./ui/ProceedButton";
 export { AddToCartButton } from "./ui/AddToCartButton";
+export { UiverseLanguageButton } from "./ui/UiverseLanguageButton";

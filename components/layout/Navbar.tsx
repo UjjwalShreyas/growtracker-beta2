@@ -9,6 +9,7 @@ import { useLanguage } from "@/lib/i18n/useLanguage";
 import { type Lang, type Translations } from "@/lib/i18n/translations";
 import { useState, useEffect } from "react";
 import { ArrowButton } from "@/components/ui/ArrowButton";
+import { UiverseLanguageButton } from "@/components/ui/UiverseLanguageButton";
 
 type NavKey = "navHome" | "navFeatures" | "navHowItWorks" | "navReviews";
 
@@ -128,41 +129,7 @@ export default function Navbar() {
 
         {/* Right: Auth Buttons + Language */}
         <div className="flex items-center gap-3 shrink-0">
-          <div
-            className="radio-inputs relative flex flex-wrap rounded-lg p-1 box-border"
-            style={{
-              backgroundColor: "#EEE",
-              border: "2px solid #1A1118",
-              boxShadow: "2px 2px 0px #1A1118",
-            }}
-          >
-            {LANG_OPTIONS.map(({ code, label }) => {
-              const isChecked = lang === code;
-              return (
-                <label key={code} className="radio flex-1 text-center cursor-pointer m-0">
-                  <input
-                    type="radio"
-                    name="language-radio"
-                    checked={isChecked}
-                    onChange={() => setLang(code)}
-                    className="hidden"
-                  />
-                  <span
-                    className="name flex items-center justify-center rounded-md px-2.5 py-1 text-xs transition-all duration-150 select-none whitespace-nowrap"
-                    style={{
-                      backgroundColor: isChecked ? "#fff" : "transparent",
-                      color: "#1A1118",
-                      fontWeight: isChecked ? 800 : 600,
-                      boxShadow: isChecked ? "0 1px 3px rgba(0, 0, 0, 0.15)" : "none",
-                      border: isChecked ? "1.5px solid #1A1118" : "1.5px solid transparent",
-                    }}
-                  >
-                    {label}
-                  </span>
-                </label>
-              );
-            })}
-          </div>
+          <UiverseLanguageButton />
 
           <ArrowButton
             fullWidth={false}
