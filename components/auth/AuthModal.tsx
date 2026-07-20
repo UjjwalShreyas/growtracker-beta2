@@ -2,11 +2,13 @@
 
 import { useAuth } from "@/lib/hooks/useAuth";
 import { useLanguage } from "@/lib/i18n/useLanguage";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export function AuthModal() {
-  const { showAuthModal, setShowAuthModal, login } = useAuth();
+  const { showAuthModal, setShowAuthModal } = useAuth();
   const { t, lang } = useLanguage();
+  const router = useRouter();
 
   // Close on Escape key
   useEffect(() => {
@@ -31,18 +33,28 @@ export function AuthModal() {
     te: { title: "సైన్ ఇన్ అవసరం", desc: "దయచేసి ఈ ఫీచర్‌ను ఉపయోగించడానికి సైన్ ఇన్ చేయండి." },
   };
 
-  const text = titles[lang] || titles.en;
+  const text = titles[lang as keyof typeof titles] || titles.en;
+
+  const goToLogin = () => {
+    setShowAuthModal(false);
+    router.push("/login");
+  };
+
+  const goToSignup = () => {
+    setShowAuthModal(false);
+    router.push("/signup");
+  };
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in"
       style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
       onClick={() => setShowAuthModal(false)}
     >
-      <div 
+      <div
         className="relative w-full max-w-sm p-6 rounded-xl animate-pop-in"
-        style={{ 
-          border: "2px solid #1A1118", 
+        style={{
+          border: "2px solid #1A1118",
           boxShadow: "8px 8px 0px #1A1118",
           maxWidth: "400px",
           background: "#FAF6EE",
@@ -50,7 +62,7 @@ export function AuthModal() {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
-        <button 
+        <button
           onClick={() => setShowAuthModal(false)}
           className="absolute top-3 right-4 text-2xl font-bold hover:opacity-60 transition-opacity"
           style={{ color: "#1A1118" }}
@@ -73,7 +85,7 @@ export function AuthModal() {
         {/* Buttons */}
         <div className="flex flex-col gap-3">
           <button
-            onClick={login}
+            onClick={goToLogin}
             className="w-full py-3.5 text-sm font-black rounded-lg transition-all hover:translate-y-[-2px] active:translate-y-0"
             style={{
               border: "2px solid #1A1118",
@@ -84,9 +96,9 @@ export function AuthModal() {
           >
             {t.navSignIn}
           </button>
-          
+
           <button
-            onClick={login}
+            onClick={goToSignup}
             className="w-full py-3.5 text-sm font-black rounded-lg transition-all hover:bg-gray-50"
             style={{
               border: "2px solid #1A1118",
@@ -97,10 +109,6 @@ export function AuthModal() {
             {t.navSignUp}
           </button>
         </div>
-
-        <p className="text-center text-xs mt-4" style={{ color: "#A89098" }}>
-          Demo mode — instant access
-        </p>
       </div>
     </div>
   );

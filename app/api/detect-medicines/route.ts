@@ -17,8 +17,9 @@ export async function POST(req: NextRequest) {
     const mimeType = mimeMatch ? mimeMatch[1] : "image/jpeg";
 
     // Use Gemini 1.5 Pro for highly accurate text extraction
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
-
+// Use the current stable Flash model — "latest" alias avoids breaking
+    // again when Google deprecates/renames specific version numbers
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 const prompt = `You are an expert pharmacist AI assistant. Your ONLY job is to extract exact information by READING the text printed on medicine strips, bottles, or boxes.
 
 CRITICAL INSTRUCTION: You must visually scan the image for printed expiry dates. Look for text like "EXP", "EXP.", "Expiry Date", "Use By". 
