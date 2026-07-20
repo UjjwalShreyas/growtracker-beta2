@@ -32,7 +32,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     try {
       const stored = localStorage.getItem("gt_lang") as Lang | null;
       if (stored && ["en", "hi", "te"].includes(stored)) {
-        setLangState(stored);
+        Promise.resolve().then(() => setLangState(stored));
       }
     } catch {
       // localStorage may be unavailable in SSR / private browsing

@@ -48,7 +48,7 @@ export default function TermsAndConditionsPage() {
 
           <h2 className="text-xl font-bold mt-8 mb-4 text-black">5. Disclaimer of Warranties</h2>
           <p>
-            The service is provided on an "as is" and "as available" basis without any warranties of any kind, 
+            The service is provided on an &quot;as is&quot; and &quot;as available&quot; basis without any warranties of any kind, 
             either express or implied.
           </p>
 

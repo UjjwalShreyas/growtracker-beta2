@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,7 +32,7 @@ Respond ONLY with a valid JSON object, no other text, no markdown code fences, i
 
 Estimates should be reasonable for a single typical serving. If the dish is unclear, make your best reasonable guess rather than refusing. Calories/protein/carbs/fat are per-serving numbers for the whole plate, not per ingredient.`;
 
-    const generateWithRetry = async (retries = 2): Promise<any> => {
+    const generateWithRetry = async (retries = 2): Promise<import("@google/generative-ai").GenerateContentResult> => {
       try {
         return await model.generateContent([
           prompt,
@@ -43,8 +43,9 @@ Estimates should be reasonable for a single typical serving. If the dish is uncl
             },
           },
         ]);
-      } catch (err: any) {
-        if (err?.status === 429 && retries > 0) {
+      } catch (err: unknown) {
+        const status = (err as { status?: number })?.status;
+        if (status === 429 && retries > 0) {
           // Wait a few seconds and try again
           await new Promise((resolve) => setTimeout(resolve, 5000));
           return generateWithRetry(retries - 1);
