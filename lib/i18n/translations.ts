@@ -141,6 +141,10 @@ export interface Translations {
   catOilsPantry: string;
   catFreshVegetables: string;
   catLeafyHerbs: string;
+  catMedicines: string;
+  catPills: string;
+  catSyrups: string;
+  catFirstAid: string;
 
   // ── Reminders & Alerts Section ─────────────────────────────────────────
   dashRemindersTitle: string;
@@ -194,8 +198,11 @@ export interface Translations {
   scanExpiryAIPredicted: string;
   scanModeGrocery: string;
   scanModeMeal: string;
+  scanModeMedicine: string;
   scanMealTitle: string;
+  scanMedicineTitle: string;
   scanMealDesc: string;
+  scanMedicineDesc: string;
   scanMealScanningMsg: string;
   scanMealReviewTitle: string;
   scanMealReviewDesc: string;
@@ -315,8 +322,8 @@ const en: Translations = {
   // ── Login
   loginTitle:             "Welcome Back",
   loginSubtitle:          "Sign in to your account",
-  loginEmailLabel:        "Email ID",
-  loginEmailPlaceholder:  "you@example.com",
+  loginEmailLabel:        "Email or Phone Number",
+  loginEmailPlaceholder:  "you@example.com or +91...",
   loginPasswordLabel:     "Password",
   loginPasswordPlaceholder: "Enter your password",
   loginButton:            "Login",
@@ -328,8 +335,8 @@ const en: Translations = {
   signupSubtitle:          "Create your account",
   signupNameLabel:         "Your Name",
   signupNamePlaceholder:   "Enter your name",
-  signupEmailLabel:        "Email ID",
-  signupEmailPlaceholder:  "you@example.com",
+  signupEmailLabel:        "Email or Phone Number",
+  signupEmailPlaceholder:  "you@example.com or +91...",
   signupPasswordLabel:     "Password",
   signupPasswordPlaceholder: "Create a password",
   signupButton:            "Create Account",
@@ -385,6 +392,10 @@ const en: Translations = {
   catOilsPantry: "Oils & Pantry Essentials",
   catFreshVegetables: "Fresh Vegetables",
   catLeafyHerbs: "Leafy Greens & Herbs",
+  catMedicines: "Medicines",
+  catPills: "Pills & Tablets",
+  catSyrups: "Syrups & Liquids",
+  catFirstAid: "First Aid & Topical",
 
   dashRemindersTitle: "⚡ Alerts & Reminders",
   dashRemindersSub: "Instant notifications, expiring food & low stock updates",
@@ -413,7 +424,7 @@ const en: Translations = {
   scanStepUpload: "Pick a photo",
   scanStepScanning: "Scanning…",
   scanStepReview: "Review items",
-  scanPickPhotoDesc: "A photo of your shopping bag or receipt works great.",
+  scanPickPhotoDesc: "Upload a receipt or a photo of your pantry items.",
   scanScanPhotoBtn: "📷 Scan this photo",
   scanPickFirstBtn: "Pick a photo first",
   scanScanningMsg: "Reviewing your photo… spotting items 🔍",
@@ -430,10 +441,14 @@ const en: Translations = {
   scanRemoveAriaLabel: (name) => `Remove ${name}`,
   scanBackBtn: "← Back",
   scanExpiryAIPredicted: "AI predicted · tap to edit",
-  scanModeGrocery: "Grocery Scan",
-  scanModeMeal: "Meal Scan",
-  scanMealTitle: "AI Meal Tracker",
-  scanMealDesc: "Scan your prepared meal/curry to count macros and deduct ingredients from pantry",
+  scanModeGrocery: "Groceries",
+  scanModeMeal: "Meals",
+  scanModeMedicine: "Medicine",
+  scanTitle: "Scan Groceries",
+  scanMealTitle: "Scan a Meal",
+  scanMedicineTitle: "Scan Medicine",
+  scanMealDesc: "Snap a photo of your meal to log macros.",
+  scanMedicineDesc: "Snap a photo of medicine strips or bottles.",
   scanMealScanningMsg: "Analyzing plate & macros… 🍽️",
   scanMealReviewTitle: "Meal Consumption Review",
   scanMealReviewDesc: "Confirm the curry/dish and ingredients eaten to subtract them from your stock.",
@@ -618,6 +633,10 @@ const hi: Translations = {
   catOilsPantry: "तेल और रसोई सामग्री",
   catFreshVegetables: "ताज़ा सब्जियाँ",
   catLeafyHerbs: "हरी पत्तेदार सब्जियाँ",
+  catMedicines: "दवाइयां",
+  catPills: "गोलियां",
+  catSyrups: "सिरप",
+  catFirstAid: "प्राथमिक चिकित्सा",
 
   dashRemindersTitle: "⚡ अलर्ट और रिमाइंडर्स",
   dashRemindersSub: "तुरंत नोटिफिकेशन, खराब होने वाले और खत्म होने वाले सामान की जानकारी",
@@ -675,6 +694,19 @@ const hi: Translations = {
     "Red Onions":          "लाल प्याज़",
     "Organic Baby Spinach": "पालक",
     "Fresh Coriander":     "हरा धनिया",
+    "Rajma":               "राजमा",
+    "Oats":                "ओट्स",
+    "Masoor Dal":          "मसूर दाल",
+    "Brown Rice":          "ब्राउन राइस",
+    "Sourdough Bread":     "सॉरडो ब्रेड",
+    "Adzuki Beans":        "अज़ुकी बीन्स",
+    "Bananas":             "केले",
+    "Eggs":                "अंडे",
+    "Cabbage":             "पत्ता गोभी",
+    "Organic Spinach":     "ऑर्गेनिक पालक",
+    "Red Beans":           "राजमा",
+    "Cheddar Cheese":      "चेडर चीज़",
+    "Olive Oil":           "जैतून का तेल",
   },
 
   scanTitle: "सामान स्कैन करें",
@@ -886,6 +918,10 @@ const te: Translations = {
   catOilsPantry: "నూనెలు & కిరాణా నిల్వలు",
   catFreshVegetables: "తాజా కూరగాయలు",
   catLeafyHerbs: "ఆకుకూరలు & మూలికలు",
+  catMedicines: "మందులు",
+  catPills: "మాత్రలు",
+  catSyrups: "సిరప్‌లు",
+  catFirstAid: "ప్రథమ చికిత్స",
 
   dashRemindersTitle: "⚡ హెచ్చరికలు & రిమైండర్లు",
   dashRemindersSub: "తక్షణ నోటిఫికేషన్లు, గడువు ముగిసే ఆహారం & నిల్వ తగ్గిన సరుకులు",
@@ -943,6 +979,19 @@ const te: Translations = {
     "Red Onions":          "ఎర్ర ఉల్లిపాయలు",
     "Organic Baby Spinach": "పాలకూర",
     "Fresh Coriander":     "తాజా కొత్తిమీర",
+    "Rajma":               "రాజ్మా",
+    "Oats":                "ఓట్స్",
+    "Masoor Dal":          "మసూర్ పప్పు",
+    "Brown Rice":          "బ్రౌన్ రైస్",
+    "Sourdough Bread":     "సోర్డో బ్రెడ్",
+    "Adzuki Beans":        "అజుకి బీన్స్",
+    "Bananas":             "అరటిపండ్లు",
+    "Eggs":                "గుడ్లు",
+    "Cabbage":             "క్యాబేజీ",
+    "Organic Spinach":     "సేంద్రియ పాలకూర",
+    "Red Beans":           "రాజ్మా",
+    "Cheddar Cheese":      "చెడ్డార్ చీజ్",
+    "Olive Oil":           "ఆలివ్ నూనె",
   },
 
   scanTitle: "కిరాణా స్కాన్ చేయి",
@@ -1032,6 +1081,10 @@ export function translateCategory(cat: string, t: Translations): string {
   if (lc === "other" || lc === "oils & pantry essentials") return t.catOilsPantry;
   if (lc === "vegetable" || lc === "fresh vegetables") return t.catFreshVegetables;
   if (lc === "leafy" || lc === "leafy greens & herbs") return t.catLeafyHerbs;
+  if (lc === "medicines" || lc === "medicine") return t.catMedicines;
+  if (lc === "pill" || lc === "pills" || lc === "pills & tablets") return t.catPills;
+  if (lc === "syrup" || lc === "syrups" || lc === "syrups & liquids") return t.catSyrups;
+  if (lc === "firstaid" || lc === "first aid" || lc === "first aid & topical") return t.catFirstAid;
   if (lc === "bakery") return t.catBakery;
   if (lc === "fruit") return t.catFruit;
   if (lc === "meat") return t.catMeat;
@@ -1041,4 +1094,41 @@ export function translateCategory(cat: string, t: Translations): string {
 export function translateItemName(name: string, t: Translations): string {
   if (!name) return name;
   return t.pantryItemNames[name] || name;
+}
+
+export function translateQuantity(qty: string, lang: Lang): string {
+  if (!qty || lang === "en") return qty;
+  
+  let res = qty.toLowerCase();
+  
+  const dicts: Record<string, Record<string, string>> = {
+    hi: {
+      "pieces": "टुकड़े",
+      "piece": "टुकड़ा",
+      "loaf": "लोफ",
+      "bunch": "गुच्छा",
+      "kg": "किग्रा",
+      "g": "ग्राम",
+      "ml": "मिली",
+      "l": "लीटर"
+    },
+    te: {
+      "pieces": "ముక్కలు",
+      "piece": "ముక్క",
+      "loaf": "లోఫ్",
+      "bunch": "కట్ట",
+      "kg": "కి.గ్రా",
+      "g": "గ్రా",
+      "ml": "మి.లీ",
+      "l": "లీటర్"
+    }
+  };
+  
+  const dict = dicts[lang] || {};
+  for (const [en, trans] of Object.entries(dict)) {
+    const regex = new RegExp(`\\b${en}\\b`, 'gi');
+    res = res.replace(regex, trans);
+  }
+  
+  return res;
 }

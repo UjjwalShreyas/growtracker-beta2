@@ -9,6 +9,10 @@ export type CategoryIconType =
   | "groceries"
   | "vegetables"
   | "leafy"
+  | "medicine"
+  | "pill"
+  | "syrup"
+  | "firstaid"
   | string;
 
 interface CategoryIconProps {
@@ -151,6 +155,92 @@ export function CategoryIcon({
         <path d="M5 12h14a6 6 0 0 1-14 0Z" />
         <path d="M4 18h16" />
         <path d="M6 21h12" />
+      </svg>
+    );
+  }
+
+  // Medicines Main Category Icon (Cross / Health)
+  if (key === "medicine" || key === "medicines") {
+    return (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+      >
+        <path d="M12 2v20" />
+        <path d="M2 12h20" />
+        <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
+      </svg>
+    );
+  }
+
+  // Pill / Tablet Icon
+  if (key === "pill" || key === "pills") {
+    return (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+      >
+        <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" />
+        <path d="m8.5 8.5 7 7" />
+      </svg>
+    );
+  }
+
+  // Syrup / Liquid Icon
+  if (key === "syrup" || key === "syrups" || key === "liquid") {
+    return (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+      >
+        <path d="M10 2v3" />
+        <path d="M14 2v3" />
+        <path d="M8.5 5h7a1.5 1.5 0 0 1 1.5 1.5v14A1.5 1.5 0 0 1 15.5 22h-7A1.5 1.5 0 0 1 7 20.5v-14A1.5 1.5 0 0 1 8.5 5Z" />
+        <path d="M7 11h10" />
+        <path d="M7 16h10" />
+      </svg>
+    );
+  }
+
+  // First Aid / Topical Icon
+  if (key === "firstaid" || key === "aid") {
+    return (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+      >
+        <rect x="2" y="6" width="20" height="14" rx="2" ry="2" />
+        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        <path d="M12 10v4" />
+        <path d="M10 12h4" />
       </svg>
     );
   }

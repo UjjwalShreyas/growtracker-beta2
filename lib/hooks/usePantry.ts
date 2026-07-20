@@ -47,10 +47,12 @@ export function usePantry() {
     if (!user) return;
 
     // Strip any client-generated IDs — let Supabase generate real UUIDs,
-    // and attach the current user's ID to each row.
+    // attach the current user's ID, and lock in the starting quantity
+    // so low-stock alerts can later compare "left" against "started with".
     const rowsToInsert = newItems.map(({ id, ...rest }) => ({
       ...rest,
       user_id: user.id,
+      initial_quantity: rest.quantity,
     }));
 
     const { data, error } = await supabase

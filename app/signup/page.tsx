@@ -14,7 +14,6 @@ export default function SignupPage() {
   const { signUp } = useAuth();
 
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -98,29 +97,6 @@ export default function SignupPage() {
 
           <div>
             <label
-              htmlFor="phone"
-              className="block text-sm font-bold mb-1"
-              style={{ color: "#1A1118" }}
-            >
-              {t.phoneLabel}
-            </label>
-            <input
-              id="phone"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-3 py-2 text-sm outline-none rounded-lg"
-              style={{
-                border: "2px solid #1A1118",
-                background: "#FAF6EE",
-                color: "#1A1118",
-              }}
-              placeholder={t.phonePlaceholder}
-            />
-          </div>
-
-          <div>
-            <label
               htmlFor="email"
               className="block text-sm font-bold mb-1"
               style={{ color: "#1A1118" }}
@@ -129,7 +105,7 @@ export default function SignupPage() {
             </label>
             <input
               id="email"
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

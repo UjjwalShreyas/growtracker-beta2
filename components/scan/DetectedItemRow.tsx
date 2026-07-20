@@ -65,7 +65,7 @@ export default function DetectedItemRow({ item, onChange, onDelete }: DetectedIt
                 >
                   <span className="truncate">
                     🤖 {item.expiry_date
-                      ? new Date(item.expiry_date).toLocaleDateString(undefined, { day: "numeric", month: "short" })
+                      ? new Date(item.expiry_date).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })
                       : "—"}
                   </span>
                   <span className="text-[10px] text-violet-400 group-hover:text-violet-600 shrink-0">✏️</span>

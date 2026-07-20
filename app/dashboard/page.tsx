@@ -19,7 +19,7 @@ import { useAuth } from "@/lib/hooks/useAuth";
 import { CategoryIcon } from "@/components/pantry/CategoryIcon";
 import PantryReminders from "@/components/pantry/PantryReminders";
 
-type MainCategoryKey = "all" | "groceries" | "vegetables";
+type MainCategoryKey = "all" | "groceries" | "vegetables" | "medicines";
 
 export default function DashboardPage() {
   const { items, loaded, removeItem } = usePantry();
@@ -58,22 +58,42 @@ export default function DashboardPage() {
       leafy:     { title: "Leafy Greens & Herbs", icon: "leafy", items: [] },
     };
 
+    const medicinesSubcats: Record<string, { title: string; icon: string; items: typeof items }> = {
+      pill:      { title: "Pills & Tablets", icon: "pill", items: [] },
+      syrup:     { title: "Syrups & Liquids", icon: "syrup", items: [] },
+      firstaid:  { title: "First Aid & Topical", icon: "firstaid", items: [] },
+    };
+
     filtered.forEach((item) => {
       const cat = item.category?.toLowerCase() || "other";
       const name = item.item_name.toLowerCase();
 
-      const isVegOrProduce =
-        cat === "vegetable" ||
-        cat === "leafy" ||
-        cat === "fruit" ||
-        cat === "produce" ||
-        name.includes("spinach") ||
-        name.includes("coriander") ||
-        name.includes("tomato") ||
-        name.includes("garlic") ||
-        name.includes("onion");
+      const isMedicine =
+        cat === "medicine" || cat === "pill" || cat === "syrup" || cat === "firstaid" ||
+        name.includes("pill") || name.includes("syrup") || name.includes("paracetamol") || name.includes("aid");
 
-      if (isVegOrProduce) {
+      const isVegOrProduce =
+        !isMedicine && (
+          cat === "vegetable" ||
+          cat === "leafy" ||
+          cat === "fruit" ||
+          cat === "produce" ||
+          name.includes("spinach") ||
+          name.includes("coriander") ||
+          name.includes("tomato") ||
+          name.includes("garlic") ||
+          name.includes("onion")
+        );
+
+      if (isMedicine) {
+        if (cat === "syrup" || name.includes("syrup")) {
+          medicinesSubcats.syrup.items.push(item);
+        } else if (cat === "firstaid" || name.includes("aid")) {
+          medicinesSubcats.firstaid.items.push(item);
+        } else {
+          medicinesSubcats.pill.items.push(item);
+        }
+      } else if (isVegOrProduce) {
         if (cat === "leafy" || name.includes("spinach") || name.includes("coriander") || name.includes("herb")) {
           vegetablesSubcats.leafy.items.push(item);
         } else {
@@ -94,14 +114,19 @@ export default function DashboardPage() {
 
     const groceriesGroups = Object.values(groceriesSubcats).filter((s) => s.items.length > 0);
     const vegetablesGroups = Object.values(vegetablesSubcats).filter((s) => s.items.length > 0);
+    const medicinesGroups = Object.values(medicinesSubcats).filter((s) => s.items.length > 0);
+
     const totalGroceries = groceriesGroups.reduce((acc, g) => acc + g.items.length, 0);
     const totalVegetables = vegetablesGroups.reduce((acc, g) => acc + g.items.length, 0);
+    const totalMedicines = medicinesGroups.reduce((acc, g) => acc + g.items.length, 0);
 
     return {
       groceries: groceriesGroups,
       vegetables: vegetablesGroups,
+      medicines: medicinesGroups,
       totalGroceries,
       totalVegetables,
+      totalMedicines,
     };
   }, [filtered]);
 
@@ -403,6 +428,24 @@ export default function DashboardPage() {
                 {classified.totalVegetables}
               </span>
             </button>
+
+            {/* Medicines Main Category Tab */}
+            <button
+              type="button"
+              onClick={() => setActiveMainCategory("medicines")}
+              className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold transition-all ${
+                activeMainCategory === "medicines"
+                  ? "bg-white shadow-sm border border-black"
+                  : "text-gray-600 hover:bg-white/50"
+              }`}
+              style={{ color: activeMainCategory === "medicines" ? "#1A1118" : "#475569" }}
+            >
+              <CategoryIcon category="medicine" size={14} color="currentColor" />
+              <span>{translateCategory("Medicines", t)}</span>
+              <span className="text-[10px] bg-gray-200 px-1.5 py-0.5 rounded-full font-black">
+                {classified.totalMedicines}
+              </span>
+            </button>
           </div>
         </div>
       )}
@@ -528,6 +571,63 @@ export default function DashboardPage() {
                 {/* Subcategories under Vegetables & Produce */}
                 <div className="flex flex-col gap-5 pl-1">
                   {classified.vegetables.map((sub) => (
+                    <div key={sub.title} className="flex flex-col gap-2.5">
+                      {/* Subcategory mini header */}
+                      <div className="flex items-center gap-2">
+                        <CategoryIcon category={sub.icon} size={15} color="#7A6070" />
+                        <h3 className="text-xs font-black uppercase tracking-wider text-[#7A6070]">
+                          {translateCategory(sub.title, t)}
+                        </h3>
+                        <span className="text-[11px] font-bold text-[#A89098]">
+                          ({sub.items.length})
+                        </span>
+                      </div>
+
+                      {/* Item Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {sub.items.map((item) => (
+                          <PantryItemCard
+                            key={item.id}
+                            item={item}
+                            onDelete={removeItem}
+                            subcategoryLabel={sub.title}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+          {/* ── Main Category 3: Medicines ────────────── */}
+          {(activeMainCategory === "all" || activeMainCategory === "medicines") &&
+            classified.medicines.length > 0 && (
+              <div className="flex flex-col gap-4">
+                {/* Main Header */}
+                <div className="flex items-center justify-between pb-2.5 border-b-2 border-[#1A1118]">
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      className="w-8 h-8 rounded-lg flex items-center justify-center"
+                      style={{ background: "#e0e7ff", border: "1.5px solid #1A1118" }}
+                    >
+                      <CategoryIcon category="medicine" size={18} color="#1A1118" />
+                    </div>
+                    <h2 className="text-base font-black uppercase tracking-wide text-[#1A1118]">
+                      {translateCategory("Medicines", t)}
+                    </h2>
+                  </div>
+                  <span
+                    className="text-xs font-black px-2.5 py-0.5 rounded-full"
+                    style={{ background: "#e0e7ff", border: "1.5px solid #1A1118", color: "#1A1118" }}
+                  >
+                    {t.dashSubtitleCount(classified.totalMedicines)}
+                  </span>
+                </div>
+
+                {/* Subcategories under Medicines */}
+                <div className="flex flex-col gap-5 pl-1">
+                  {classified.medicines.map((sub) => (
                     <div key={sub.title} className="flex flex-col gap-2.5">
                       {/* Subcategory mini header */}
                       <div className="flex items-center gap-2">

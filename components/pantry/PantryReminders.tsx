@@ -3,7 +3,8 @@
 import React, { useState, useMemo } from "react";
 import { PantryItem } from "@/lib/data/mockData";
 import { useLanguage } from "@/lib/i18n/useLanguage";
-import { translateItemName } from "@/lib/i18n/translations";
+import { translateItemName, translateQuantity } from "@/lib/i18n/translations";
+import { isExpiringSoon, isLowStock, daysUntilExpiry } from "@/lib/utils/pantryAlerts";
 
 interface AlertItem {
   id: string;
@@ -21,7 +22,7 @@ interface PantryRemindersProps {
 }
 
 export default function PantryReminders({ items }: PantryRemindersProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [dismissedIds, setDismissedIds] = useState<string[]>([]);
   const [filter, setFilter] = useState<"all" | "expiry" | "low_stock">("all");
 
@@ -29,40 +30,29 @@ export default function PantryReminders({ items }: PantryRemindersProps) {
     const list: AlertItem[] = [];
 
     // 1. Expiring soon or expired items
+   // 1. Expiring soon or expired items
     items.forEach((item) => {
       const displayName = translateItemName(item.item_name, t);
-      if (item.expiry_date) {
-        const today = new Date("2026-07-14");
-        const exp = new Date(item.expiry_date);
-        const diffDays = Math.ceil((exp.getTime() - today.getTime()) / (1000 * 3600 * 24));
-
-        if (diffDays <= 4) {
-          list.push({
-            id: `exp-${item.id}`,
-            type: "expiry",
-            title: displayName,
-            message:
-              diffDays <= 0
-                ? t.dashAlertExpired(displayName)
-                : t.dashAlertExpiringSoon(displayName, diffDays),
-            badge: diffDays <= 1 ? t.alertBadgeUrgent : t.alertBadgeExpiringSoon,
-            color: "#B91C1C",
-            bgColor: "#FEF2F2",
-            borderColor: "#EF4444",
-          });
-        }
+      if (item.expiry_date && isExpiringSoon(item)) {
+        const diffDays = daysUntilExpiry(item) ?? 0;
+        list.push({
+          id: `exp-${item.id}`,
+          type: "expiry",
+          title: displayName,
+          message:
+            diffDays <= 0
+              ? t.dashAlertExpired(displayName)
+              : t.dashAlertExpiringSoon(displayName, diffDays),
+          badge: diffDays <= 1 ? t.alertBadgeUrgent : t.alertBadgeExpiringSoon,
+          color: "#B91C1C",
+          bgColor: "#FEF2F2",
+          borderColor: "#EF4444",
+        });
       }
     });
 
-    // 2. Low stock / Running out items
-    const lowStockItems = items.filter(
-      (item) =>
-        item.quantity.includes("1 L") ||
-        item.quantity.includes("200 g") ||
-        item.quantity.includes("1 bunch") ||
-        item.quantity.includes("6 pieces") ||
-        item.quantity.includes("250 g")
-    );
+    // 2. Low stock / Running out items — real percentage-remaining check
+    const lowStockItems = items.filter((item) => isLowStock(item));
 
     lowStockItems.slice(0, 3).forEach((item) => {
       const displayName = translateItemName(item.item_name, t);
@@ -70,7 +60,7 @@ export default function PantryReminders({ items }: PantryRemindersProps) {
         id: `low-${item.id}`,
         type: "low_stock",
         title: displayName,
-        message: t.dashAlertLowStock(displayName, item.quantity),
+        message: t.dashAlertLowStock(displayName, translateQuantity(item.quantity, lang)),
         badge: t.alertBadgeRunningLow,
         color: "#C2410C",
         bgColor: "#FFF7ED",

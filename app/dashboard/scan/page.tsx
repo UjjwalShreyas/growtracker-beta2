@@ -24,7 +24,7 @@ export default function ScanPage() {
   const [step, setStep]                   = useState<Step>("upload");
   const [preview, setPreview]             = useState<string | null>(null);
   const [detectedItems, setDetectedItems] = useState<DetectedItem[]>([]);
-  const [scanMode, setScanMode]           = useState<"grocery" | "meal">("grocery");
+  const [scanMode, setScanMode]           = useState<"grocery" | "meal" | "medicine">("grocery");
 
   // Meal scan outputs:
   const [mealName, setMealName] = useState("AI Smart Curry Plate");
@@ -44,9 +44,10 @@ export default function ScanPage() {
     setStep("scanning");
     setScanError(null);
 
-    if (scanMode === "grocery") {
+    if (scanMode === "grocery" || scanMode === "medicine") {
       try {
-        const res = await fetch("/api/detect-groceries", {
+        const endpoint = scanMode === "medicine" ? "/api/detect-medicines" : "/api/detect-groceries";
+        const res = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ imageBase64: preview }),
@@ -222,6 +223,16 @@ export default function ScanPage() {
           >
             🍽️ {t.scanModeMeal}
           </button>
+          <button
+            onClick={() => setScanMode("medicine")}
+            className={`flex-1 py-2 text-xs font-black uppercase tracking-wider rounded-lg transition-all ${
+              scanMode === "medicine"
+                ? "bg-[#1A1118] text-white"
+                : "text-gray-500 hover:text-gray-900"
+            }`}
+          >
+            💊 {t.scanModeMedicine}
+          </button>
         </div>
       )}
 
@@ -230,10 +241,10 @@ export default function ScanPage() {
         <div className="flex flex-col gap-5 anim-fade-up">
           <div>
             <h1 className="text-xl font-black text-gray-900 tracking-tight">
-              {scanMode === "grocery" ? t.scanTitle : t.scanMealTitle}
+              {scanMode === "grocery" ? t.scanTitle : scanMode === "medicine" ? t.scanMedicineTitle : t.scanMealTitle}
             </h1>
             <p className="text-sm mt-1" style={{ color: "var(--muted)" }}>
-              {scanMode === "grocery" ? t.scanPickPhotoDesc : t.scanMealDesc}
+              {scanMode === "grocery" ? t.scanPickPhotoDesc : scanMode === "medicine" ? t.scanMedicineDesc : t.scanMealDesc}
             </p>
           </div>
           <UploadDropzone onFileSelected={handleFileSelected} preview={preview} />

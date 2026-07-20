@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const genAI = new GoogleGenerativeAI(process.env.MEDICINE_GEMINI_API_KEY || process.env.GEMINI_API_KEY!);
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,24 +16,27 @@ export async function POST(req: NextRequest) {
     const mimeMatch = imageBase64.match(/^data:(image\/\w+);base64,/);
     const mimeType = mimeMatch ? mimeMatch[1] : "image/jpeg";
 
-const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+    // Use Gemini 1.5 Pro for highly accurate text extraction
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
-    const prompt = `You are an inventory detection assistant for an Indian grocery and medicine tracking app.
-Look at this photo (could be a grocery bag, kitchen counter, medicine cabinet, or pantry shelf) and identify every distinct food or medicine item visible.
+const prompt = `You are an expert pharmacist AI assistant. Your ONLY job is to extract exact information by READING the text printed on medicine strips, bottles, or boxes.
 
-For each item, estimate:
-- item_name: the common name (e.g. "Basmati Rice", "Toor Dal", "Paracetamol", "Cough Syrup")
-- quantity: your best estimate as a short string (e.g. "1 kg", "500 g", "10 tablets", "1 bottle")
-- category: one of exactly these values: "grain", "dairy", "vegetable", "spice", "medicine", "pill", "syrup", "firstaid", "other"
-- expiry_date: your best estimate in YYYY-MM-DD format based on typical shelf life for that item type, assuming today's purchase date is ${new Date().toISOString().split("T")[0]}
+CRITICAL INSTRUCTION: You must visually scan the image for printed expiry dates. Look for text like "EXP", "EXP.", "Expiry Date", "Use By". 
+For example, if the box says "EXP.MAY 2025", you MUST extract "2025-05-01". Do NOT guess the expiry date based on generic shelf life. You must act as an OCR engine to read the date.
+
+For each medicine item visible, extract:
+- item_name: the brand or generic name (e.g., "Dolo-650", "Paracetamol")
+- quantity: a short string describing the amount (e.g., "480 tablets", "15 tablets", "1 strip")
+- category: MUST be one of: "medicine", "pill", "syrup", "firstaid"
+- expiry_date: the exact expiry date YOU READ FROM THE PACKAGING in YYYY-MM-DD format (if only month and year are printed like May 2025, use "2025-05-01"). If and ONLY if there is absolutely no printed date visible, fallback to "${new Date().toISOString().split("T")[0]}". But you MUST try to read it first!
 
 Respond ONLY with a valid JSON array, no other text, no markdown code fences. Example format:
 [
-  {"item_name": "Onions", "quantity": "1 kg", "category": "vegetable", "expiry_date": "2026-08-05"},
-  {"item_name": "Paracetamol", "quantity": "1 strip", "category": "pill", "expiry_date": "2027-01-15"}
+  {"item_name": "Dolo-650", "quantity": "15 tablets", "category": "pill", "expiry_date": "2025-05-01"},
+  {"item_name": "Cough Syrup", "quantity": "1 bottle", "category": "syrup", "expiry_date": "2026-12-01"}
 ]
 
-If you cannot clearly identify any food or medicine items in the image, respond with an empty array: []`;
+If you cannot identify any medicines, respond with: []`;
 
     const result = await model.generateContent([
       prompt,

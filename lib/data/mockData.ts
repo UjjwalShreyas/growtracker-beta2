@@ -6,10 +6,11 @@ export interface PantryItem {
   id: string;
   item_name: string;
   quantity: string;
+  initial_quantity?: string;
   category: "grain" | "dairy" | "vegetable" | "spice" | "other" | string;
   expiry_date?: string;
   expiry_predicted?: boolean;
-  added_at?: string; // optional timestamp when item was added to pantry/cart
+  added_at?: string;
 }
 
 export interface DetectedItem {
@@ -128,6 +129,30 @@ export const mockPantryItems: PantryItem[] = [
     category: "leafy",
     expiry_date: "2026-07-16",
     expiry_predicted: true,
+  },
+  // ── Medicines ──────────────────────────────────────────
+  {
+    id: "m1",
+    item_name: "Paracetamol",
+    quantity: "10 pieces",
+    initial_quantity: "20 pieces",
+    category: "pill",
+    expiry_date: "2027-10-01",
+  },
+  {
+    id: "m2",
+    item_name: "Cough Syrup",
+    quantity: "150 ml",
+    initial_quantity: "200 ml",
+    category: "syrup",
+    expiry_date: "2026-11-20",
+  },
+  {
+    id: "m3",
+    item_name: "Band-Aids",
+    quantity: "20 pieces",
+    category: "firstaid",
+    expiry_date: "2030-01-01",
   },
 ];
 

@@ -2,8 +2,10 @@
 
 import { PantryItem } from "@/lib/data/mockData";
 import { useLanguage } from "@/lib/i18n/useLanguage";
-import { translateCategory, translateItemName } from "@/lib/i18n/translations";
+import { translateCategory, translateItemName, translateQuantity } from "@/lib/i18n/translations";
 import { CategoryIcon } from "@/components/pantry/CategoryIcon";
+import { isExpiringSoon, isLowStock } from "@/lib/utils/pantryAlerts";
+
 
 const CATEGORY_BG: Record<string, string> = {
   grain:     "#fef9c3",
@@ -11,6 +13,10 @@ const CATEGORY_BG: Record<string, string> = {
   vegetable: "#dcfce7",
   spice:     "#fee2e2",
   leafy:     "#d1fae5",
+  medicine:  "#e0e7ff",
+  pill:      "#e0e7ff",
+  syrup:     "#e0e7ff",
+  firstaid:  "#e0e7ff",
   other:     "#f3f4f6",
 };
 
@@ -21,27 +27,14 @@ interface PantryItemCardProps {
 }
 
 export default function PantryItemCard({ item, onDelete, subcategoryLabel }: PantryItemCardProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const bg = CATEGORY_BG[item.category] ?? CATEGORY_BG.other;
   const displayName = translateItemName(item.item_name, t);
   const displayCategory = translateCategory(subcategoryLabel || item.category, t);
 
-  const isExpiring = (() => {
-    if (!item.expiry_date) return false;
-    const today = new Date("2026-07-14");
-    const exp = new Date(item.expiry_date);
-    const diffDays = Math.ceil((exp.getTime() - today.getTime()) / (1000 * 3600 * 24));
-    return diffDays <= 4;
-  })();
-
-  const isLowStock = 
-    item.quantity.includes("1 L") ||
-    item.quantity.includes("200 g") ||
-    item.quantity.includes("1 bunch") ||
-    item.quantity.includes("6 pieces") ||
-    item.quantity.includes("250 g");
-
-  const needsAttention = isExpiring || isLowStock;
+ const isExpiring = isExpiringSoon(item);
+  const lowStock = isLowStock(item);
+  const needsAttention = isExpiring || lowStock;
 
   return (
     <div
@@ -77,7 +70,7 @@ export default function PantryItemCard({ item, onDelete, subcategoryLabel }: Pan
               {t.alertBadgeExpiringSoon || "Expiring"}
             </span>
           )}
-          {!isExpiring && isLowStock && (
+         {!isExpiring && lowStock && (
             <span
               className="text-[8px] font-black tracking-wider uppercase px-1.5 py-0.5 rounded text-white shrink-0"
               style={{ background: "#F97316" }}
@@ -87,7 +80,7 @@ export default function PantryItemCard({ item, onDelete, subcategoryLabel }: Pan
           )}
         </div>
         <p className="text-[11px] font-medium mt-0.5" style={{ color: needsAttention ? "#B91C1C" : "#7A6070" }}>
-          {item.quantity}
+          {translateQuantity(item.quantity, lang)}
         </p>
         <span
           className="inline-block text-[10px] font-black uppercase tracking-wider mt-1 px-2 py-0.5 rounded"
