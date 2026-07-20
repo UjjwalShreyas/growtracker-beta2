@@ -20,43 +20,31 @@ export default function HomePage() {
 
             {/* Left Column: Text & Mobile-App CTAs (Col 7) */}
             <div className="text-left order-1 md:order-1 md:col-span-7">
-              <div className="flex items-center gap-6 mb-2 -mt-2 sm:-mt-4">
-                <img src="/otbi.jpeg" alt="OTBI logo" className="h-16 sm:h-20 w-auto object-contain" />
-                <img src="/ou.jpeg" alt="OU logo" className="h-16 sm:h-20 w-auto object-contain" />
+              <div className="flex items-center gap-8 mb-4 -mt-2 sm:-mt-4">
+                <img src="/otbi.jpeg" alt="OTBI logo" className="h-24 sm:h-28 w-auto object-contain" />
+                <img src="/ou.jpeg" alt="OU logo" className="h-24 sm:h-28 w-auto object-contain" />
               </div>
               <span
-                className="inline-block px-3.5 py-1.5 text-xs font-black rounded-full mb-5"
-                style={{ background: "#E8D5F5", color: "#1A1118", border: "1.5px solid #1A1118" }}
+                className="inline-block px-5 py-2.5 text-base font-black rounded-full mb-7"
+                style={{ background: "#E8D5F5", color: "#1A1118", border: "2px solid #1A1118" }}
               >
                 {t.heroBadge}
               </span>
               <h1
-                className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-5 leading-[1.12]"
+                className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight mb-6 leading-[1.08]"
                 style={{ color: "#1A1118", letterSpacing: "-0.04em" }}
               >
                 {t.heroTitle}
               </h1>
-              <p className="text-base sm:text-lg mb-8 max-w-lg leading-relaxed" style={{ color: "#5a4a3a" }}>
+              <p className="text-lg sm:text-xl mb-10 max-w-lg leading-relaxed" style={{ color: "#5a4a3a" }}>
                 {t.heroSubtitle}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3.5 items-stretch sm:items-center">
                 <Link href="/signup" className="block w-full sm:w-auto">
-                  <ArrowButton className="!py-3.5 !px-7 !text-sm !rounded-xl">
+                  <ArrowButton className="!py-4 !px-9 !text-base !rounded-xl">
                     {t.heroGetStarted}
                   </ArrowButton>
-                </Link>
-                <Link
-                  href="#how-it-works"
-                  className="px-7 py-3.5 text-sm font-black rounded-xl transition-all hover:translate-y-[-2px] active:translate-y-0 text-center block w-full sm:w-auto"
-                  style={{
-                    background: "#FAF6EE",
-                    color: "#1A1118",
-                    border: "2px solid #1A1118",
-                    boxShadow: "3px 3px 0px #1A1118",
-                  }}
-                >
-                  {t.heroHowItWorks}
                 </Link>
               </div>
             </div>
