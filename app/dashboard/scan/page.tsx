@@ -330,12 +330,16 @@ export default function ScanPage() {
       {/* ── Step 3: Review ──────────────────────────────────────── */}
       {step === "review" && (
         <div className="flex flex-col gap-4 anim-fade-up">
-          {scanMode === "grocery" ? (
+          {scanMode === "grocery" || scanMode === "medicine" ? (
             <>
               <div>
-                <h1 className="text-xl font-black text-gray-900 tracking-tight">{t.scanReviewTitle}</h1>
+                <h1 className="text-xl font-black text-gray-900 tracking-tight">
+                  {scanMode === "medicine" ? "Review Detected Medicines 💊" : t.scanReviewTitle}
+                </h1>
                 <p className="text-sm mt-1" style={{ color: "var(--muted)" }}>
-                  {t.scanReviewDesc}
+                  {scanMode === "medicine"
+                    ? "Check extracted expiry dates and status before adding to your cabinet."
+                    : t.scanReviewDesc}
                 </p>
               </div>
 
